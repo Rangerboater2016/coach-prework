@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Coach Pre-Work - Meeting 2 (Application)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .progress-track {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-label {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .discipline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .discipline-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .discipline-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .discipline-card.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            color: white;
+        }
+
+        .discipline-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .discipline-card p {
+            font-size: 14px;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .discipline-card.selected p {
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-add {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover {
+            background: #f8f9fa;
+        }
+
+        .client-summary {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .client-summary h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .output-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .output-content {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            background: #667eea;
+            color: white;
+            width: 100%;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+
+        .hint {
+            background: #fff8e1;
+            border-left: 4px solid #ffd54f;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .client-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Business Coach Development Pre-Work</h1>
+            <p><strong>Meeting 2: APPLICATION (Solutions)</strong></p>
+            <p>Complete your pre-work in 15-20 minutes. Share what actually works - your success stories and proven solutions.</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-label" id="progressLabel">Step 1 of 5</div>
+        </div>
+
+        <!-- Step 1: Meeting Info -->
+        <div class="card active" id="step1">
+            <h2>Meeting Information</h2>
+            <p>Let's start with the basics about your upcoming meeting.</p>
+            
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="coachName" placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label>Meeting Date</label>
+                <input type="date" id="meetingDate">
+            </div>
+
+            <div class="form-group">
+                <label>Which DOC discipline is the focus?</label>
+                <div class="discipline-grid">
+                    <div class="discipline-card" data-discipline="Leadership">
+                        <h3>Leadership</h3>
+                        <p>Executive leadership, decision-making, vision</p>
+                    </div>
+                    <div class="discipline-card" data-discipline="Strategy">
+                        <h3>Strategy</h3>
+                        <p>Strategic planning, market positioning, growth</p>
+                    </div>
+                    <div class="discipline-card" data-discipline="People Development">
+                        <h3>People Development</h3>
+                        <p>Talent management, training, succession</p>
+                    </div>
+                    <div class="discipline-card" data-discipline="Culture">
+                        <h3>Culture</h3>
+                        <p>Values, engagement, organizational health</p>
+                    </div>
+                    <div class="discipline-card" data-discipline="Business Structure">
+                        <h3>Business Structure</h3>
+                        <p>Operations, processes, systems</p>
+                    </div>
+                    <div class="discipline-card" data-discipline="Organizational Performance">
+                        <h3>Organizational Performance</h3>
+                        <p>Metrics, scorecards, accountability</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="nextStep()">Continue →</button>
+            </div>
+        </div>
+
+        <!-- Step 2: How many clients -->
+        <div class="card" id="step2">
+            <h2>Client Examples</h2>
+            <p>How many client examples would you like to share? (1-2 recommended)</p>
+            
+            <div class="form-group">
+                <label>Number of Clients</label>
+                <select id="clientCount">
+                    <option value="1">1 Client</option>
+                    <option value="2" selected>2 Clients</option>
+                </select>
+            </div>
+
+            <div class="hint">
+                💡 Sharing 1-2 focused examples is better than trying to cover too much. Quality over quantity!
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn-primary" onclick="nextStep()">Continue →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Client Details -->
+        <div class="card" id="step3">
+            <div id="clientForms"></div>
+        </div>
+
+        <!-- Step 4: Review -->
+        <div class="card" id="step4">
+            <h2>Review Your Pre-Work</h2>
+            <p>Here's a summary of what you've shared. Make any final edits before generating your document.</p>
+            
+            <div id="reviewContent"></div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn-primary" onclick="nextStep()">Generate Document →</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Output -->
+        <div class="card" id="step5">
+            <h2>✅ Your Pre-Work is Ready!</h2>
+            <p>Copy the text below and share it with your team before the meeting.</p>
+            
+            <div class="output-section">
+                <div class="output-content" id="outputContent"></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                    <button class="copy-btn" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+                    <button class="copy-btn" onclick="emailToFacilitator()" style="background: #764ba2;">📧 Email to Facilitator</button>
+                </div>
+            </div>
+
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="btn-secondary" onclick="startOver()">Start New Pre-Work</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let totalSteps = 5;
+        let formData = {
+            coachName: '',
+            meetingDate: '',
+            discipline: '',
+            clientCount: 2,
+            clients: []
+        };
+
+        // Configure facilitator email - update this as needed
+        const FACILITATOR_EMAIL = 'facilitator@aileron.org'; // Change this to the actual email
+
+        // Parse URL parameters to pre-fill form data
+        function parseURLParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Get parameters from URL
+            const coach = urlParams.get('coach');
+            const date = urlParams.get('date');
+            const discipline = urlParams.get('discipline');
+            const facilitatorEmail = urlParams.get('facilitator');
+            const facilitatorName = urlParams.get('facilitatorName');
+            
+            // Pre-fill form data if parameters exist
+            if (coach) {
+                formData.coachName = decodeURIComponent(coach);
+                document.getElementById('coachName').value = formData.coachName;
+            }
+            
+            if (date) {
+                formData.meetingDate = date;
+                document.getElementById('meetingDate').value = date;
+            }
+            
+            if (discipline) {
+                formData.discipline = decodeURIComponent(discipline);
+                // Select the appropriate discipline card
+                document.querySelectorAll('.discipline-card').forEach(card => {
+                    if (card.dataset.discipline === formData.discipline) {
+                        card.classList.add('selected');
+                    }
+                });
+            }
+            
+            if (facilitatorEmail) {
+                formData.facilitatorEmail = decodeURIComponent(facilitatorEmail);
+            }
+            
+            if (facilitatorName) {
+                formData.facilitatorName = decodeURIComponent(facilitatorName);
+            }
+            
+            // Show facilitator info if provided
+            if (formData.facilitatorName || formData.facilitatorEmail) {
+                showFacilitatorInfo();
+            }
+        }
+
+        function showFacilitatorInfo() {
+            const header = document.querySelector('.header');
+            const facilitatorName = formData.facilitatorName || 'Facilitator';
+            const facilitatorEmail = formData.facilitatorEmail || FACILITATOR_EMAIL;
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.style.cssText = 'margin-top: 15px; padding: 12px; background: #f0f4ff; border-radius: 8px; border-left: 4px solid #667eea;';
+            infoDiv.innerHTML = `
+                <strong style="color: #667eea;">📧 Meeting Facilitator:</strong> ${facilitatorName}
+                <br><small style="color: #666;">Your completed pre-work will be sent to: ${facilitatorEmail}</small>
+            `;
+            header.appendChild(infoDiv);
+        }
+
+        // Initialize discipline selection
+        document.querySelectorAll('.discipline-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.discipline-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                formData.discipline = this.dataset.discipline;
+            });
+        });
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressLabel').textContent = `Step ${currentStep} of ${totalSteps}`;
+        }
+
+        function nextStep() {
+            // Validate current step
+            if (currentStep === 1) {
+                formData.coachName = document.getElementById('coachName').value;
+                formData.meetingDate = document.getElementById('meetingDate').value;
+                
+                if (!formData.coachName || !formData.meetingDate || !formData.discipline) {
+                    alert('Please fill in all fields before continuing.');
+                    return;
+                }
+            }
+
+            if (currentStep === 2) {
+                formData.clientCount = parseInt(document.getElementById('clientCount').value);
+                generateClientForms();
+            }
+
+            if (currentStep === 3) {
+                if (!collectClientData()) {
+                    return;
+                }
+                generateReview();
+            }
+
+            if (currentStep === 4) {
+                generateOutput();
+            }
+
+            // Move to next step
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function prevStep() {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function generateClientForms() {
+            const container = document.getElementById('clientForms');
+            container.innerHTML = '';
+
+            for (let i = 0; i < formData.clientCount; i++) {
+                const clientNum = i + 1;
+                const form = `
+                    <div style="margin-bottom: 40px;">
+                        <h2><span class="client-number">${clientNum}</span>Client Example ${clientNum}</h2>
+                        
+                        <div class="form-group">
+                            <label>Client/Company Name (optional - can be anonymous)</label>
+                            <input type="text" id="clientName${i}" placeholder="e.g., ABC Manufacturing or 'Anonymous'">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Brief Situation Overview (1-2 sentences)</label>
+                            <textarea id="clientSituation${i}" placeholder="Describe the client's situation when you started working with them..."></textarea>
+                        </div>
+
+                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">💡 Success Story Framework</h3>
+
+                        <div class="form-group">
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">1</span>Client Problem:</label>
+                            <textarea id="clientProblem${i}" placeholder="What was the client struggling with? (If possible, reference problems from Meeting 1)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">2</span>What You Used:</label>
+                            <textarea id="clientUsed${i}" placeholder="What tool, workshop, framework, or approach did you use? (Standard Aileron offering or custom?)"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">3</span>Why You Chose It:</label>
+                            <textarea id="clientWhy${i}" placeholder="What was your diagnostic reasoning? Why THIS approach for THIS client?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">4</span>Results Achieved:</label>
+                            <textarea id="clientResults${i}" placeholder="What happened? Be specific - timeframe, numbers, observable changes, what the client said..."></textarea>
+                        </div>
+
+                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">📦 Additional Information (Optional)</h3>
+
+                        <div class="form-group">
+                            <label>Resources to share:</label>
+                            <textarea id="clientResources${i}" placeholder="Did you create any templates, worksheets, or tools others could use?" style="min-height: 80px;"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gaps identified:</label>
+                            <textarea id="clientGaps${i}" placeholder="What do clients need that we DON'T have good solutions for?" style="min-height: 80px;"></textarea>
+                        </div>
+                    </div>
+                    ${i < formData.clientCount - 1 ? '<hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">' : ''}
+                `;
+                container.innerHTML += form;
+            }
+
+            container.innerHTML += `
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Review →</button>
+                </div>
+            `;
+
+            // Populate existing data if going back
+            if (formData.clients.length > 0) {
+                formData.clients.forEach((client, i) => {
+                    document.getElementById(`clientName${i}`).value = client.name || '';
+                    document.getElementById(`clientSituation${i}`).value = client.situation || '';
+                    document.getElementById(`clientProblem${i}`).value = client.problem || '';
+                    document.getElementById(`clientUsed${i}`).value = client.used || '';
+                    document.getElementById(`clientWhy${i}`).value = client.why || '';
+                    document.getElementById(`clientResults${i}`).value = client.results || '';
+                    document.getElementById(`clientResources${i}`).value = client.resources || '';
+                    document.getElementById(`clientGaps${i}`).value = client.gaps || '';
+                });
+            }
+        }
+
+        function collectClientData() {
+            formData.clients = [];
+            
+            for (let i = 0; i < formData.clientCount; i++) {
+                const client = {
+                    name: document.getElementById(`clientName${i}`).value || 'Anonymous',
+                    situation: document.getElementById(`clientSituation${i}`).value,
+                    problem: document.getElementById(`clientProblem${i}`).value,
+                    used: document.getElementById(`clientUsed${i}`).value,
+                    why: document.getElementById(`clientWhy${i}`).value,
+                    results: document.getElementById(`clientResults${i}`).value,
+                    resources: document.getElementById(`clientResources${i}`).value,
+                    gaps: document.getElementById(`clientGaps${i}`).value
+                };
+
+                // Basic validation - require the 4-part framework
+                if (!client.problem || !client.used || !client.why || !client.results) {
+                    alert(`Please complete the 4-part framework (Problem, What Used, Why, Results) for Client ${i + 1}`);
+                    return false;
+                }
+
+                formData.clients.push(client);
+            }
+            return true;
+        }
+
+        function generateReview() {
+            const container = document.getElementById('reviewContent');
+            let html = `
+                <div class="client-summary">
+                    <h4>Meeting Details</h4>
+                    <p><strong>Coach:</strong> ${formData.coachName}</p>
+                    <p><strong>Date:</strong> ${formData.meetingDate}</p>
+                    <p><strong>Discipline:</strong> ${formData.discipline}</p>
+                </div>
+            `;
+
+            formData.clients.forEach((client, i) => {
+                html += `
+                    <div class="client-summary">
+                        <h4>Client ${i + 1}: ${client.name}</h4>
+                        <p><strong>Situation:</strong> ${client.situation}</p>
+                        <p><strong>What worked:</strong> ${client.worked}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function generateOutput() {
+            let output = `BUSINESS COACH DEVELOPMENT MEETING PRE-WORK
+MEETING 2: APPLICATION (Solutions)
+Discipline: ${formData.discipline}
+Coach: ${formData.coachName}
+Date: ${formData.meetingDate}
+
+---
+
+`;
+
+            formData.clients.forEach((client, i) => {
+                output += `SUCCESS STORY ${i + 1}: ${client.name}
+
+Brief Context:
+${client.situation}
+
+SUCCESS STORY FRAMEWORK:
+
+1. CLIENT PROBLEM:
+${client.problem}
+
+2. WHAT I USED:
+${client.used}
+
+3. WHY I CHOSE IT:
+${client.why}
+
+4. RESULTS ACHIEVED:
+${client.results}
+`;
+
+                if (client.resources) {
+                    output += `
+RESOURCES TO SHARE:
+${client.resources}
+`;
+                }
+
+                if (client.gaps) {
+                    output += `
+GAPS IDENTIFIED:
+${client.gaps}
+`;
+                }
+
+                output += `
+---
+
+`;
+            });
+
+            output += `KEY TAKEAWAYS
+[Add 2-3 sentences summarizing what works and what gaps you're seeing]`;
+
+            document.getElementById('outputContent').textContent = output;
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('outputContent').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function emailToFacilitator() {
+            const text = document.getElementById('outputContent').textContent;
+            const subject = encodeURIComponent(`Pre-Work: ${formData.discipline} - ${formData.coachName}`);
+            const body = encodeURIComponent(text);
+            
+            // Use facilitator email from URL params if available, otherwise use default
+            const toEmail = formData.facilitatorEmail || FACILITATOR_EMAIL;
+            
+            // Open email client with pre-filled content
+            window.location.href = `mailto:${toEmail}?subject=${subject}&body=${body}`;
+        }
+
+        function startOver() {
+            currentStep = 1;
+            formData = {
+                coachName: '',
+                meetingDate: '',
+                discipline: '',
+                clientCount: 2,
+                clients: []
+            };
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.getElementById('step1').classList.add('active');
+            document.querySelectorAll('input, textarea, select').forEach(field => field.value = '');
+            document.querySelectorAll('.discipline-card').forEach(card => card.classList.remove('selected'));
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        // Initialize
+        updateProgress();
+        parseURLParameters();
+    </script>
+</body>
+</html>
