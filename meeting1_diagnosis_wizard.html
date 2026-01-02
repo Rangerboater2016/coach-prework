@@ -583,43 +583,21 @@
                             <textarea id="clientSituation${i}" placeholder="Describe the client's situation when you started working with them..."></textarea>
                         </div>
 
-                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">🔍 Diagnosis</h3>
-
-                        <div class="form-group">
-                            <label>What told you the client needed this discipline?</label>
-                            <textarea id="clientSignals${i}" placeholder="What specific signals or indicators pointed to this need?"></textarea>
-                        </div>
+                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">🔍 What Tells You This Client Needs This Discipline?</h3>
 
                         <div class="form-group">
                             <label>What the client said:</label>
-                            <textarea id="clientSaid${i}" placeholder="Direct quotes or paraphrased statements, their expressed pain points..."></textarea>
+                            <textarea id="clientSaid${i}" placeholder="Direct quotes or paraphrased statements - what pain points did they express?"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label>What you observed:</label>
-                            <textarea id="clientObserved${i}" placeholder="Behaviors, patterns, data, symptoms you noticed..."></textarea>
+                            <textarea id="clientObserved${i}" placeholder="Behaviors, patterns, data, symptoms you noticed in their organization..."></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label>Why you chose to focus on this discipline:</label>
-                            <textarea id="clientWhy${i}" placeholder="Your reasoning for prioritizing this discipline and how it connected to getting them traction..."></textarea>
-                        </div>
-
-                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">💡 Solution & Outcome</h3>
-
-                        <div class="form-group">
-                            <label>What you used or recommended:</label>
-                            <textarea id="clientSolution${i}" placeholder="Specific services, workshops, tools, approaches - standard or custom..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>What worked:</label>
-                            <textarea id="clientWorked${i}" placeholder="Results achieved, traction gained, why it was effective..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Gaps identified:</label>
-                            <textarea id="clientGaps${i}" placeholder="Anything missing from current offerings, resources you created, collaboration opportunities..."></textarea>
+                            <label>Why this discipline (vs another):</label>
+                            <textarea id="clientWhy${i}" placeholder="What made you realize this was THIS discipline and not another? What ruled out other disciplines?"></textarea>
                         </div>
                     </div>
                     ${i < formData.clientCount - 1 ? '<hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">' : ''}
@@ -639,13 +617,9 @@
                 formData.clients.forEach((client, i) => {
                     document.getElementById(`clientName${i}`).value = client.name || '';
                     document.getElementById(`clientSituation${i}`).value = client.situation || '';
-                    document.getElementById(`clientSignals${i}`).value = client.signals || '';
                     document.getElementById(`clientSaid${i}`).value = client.said || '';
                     document.getElementById(`clientObserved${i}`).value = client.observed || '';
                     document.getElementById(`clientWhy${i}`).value = client.why || '';
-                    document.getElementById(`clientSolution${i}`).value = client.solution || '';
-                    document.getElementById(`clientWorked${i}`).value = client.worked || '';
-                    document.getElementById(`clientGaps${i}`).value = client.gaps || '';
                 });
             }
         }
@@ -657,18 +631,14 @@
                 const client = {
                     name: document.getElementById(`clientName${i}`).value || 'Anonymous',
                     situation: document.getElementById(`clientSituation${i}`).value,
-                    signals: document.getElementById(`clientSignals${i}`).value,
                     said: document.getElementById(`clientSaid${i}`).value,
                     observed: document.getElementById(`clientObserved${i}`).value,
-                    why: document.getElementById(`clientWhy${i}`).value,
-                    solution: document.getElementById(`clientSolution${i}`).value,
-                    worked: document.getElementById(`clientWorked${i}`).value,
-                    gaps: document.getElementById(`clientGaps${i}`).value
+                    why: document.getElementById(`clientWhy${i}`).value
                 };
 
                 // Basic validation
-                if (!client.situation || !client.signals || !client.solution) {
-                    alert(`Please fill in at least the situation, key signals, and solution for Client ${i + 1}`);
+                if (!client.situation || !client.said || !client.observed) {
+                    alert(`Please fill in at least the situation, what client said, and what you observed for Client ${i + 1}`);
                     return false;
                 }
 
@@ -703,6 +673,7 @@
 
         function generateOutput() {
             let output = `BUSINESS COACH DEVELOPMENT MEETING PRE-WORK
+MEETING 1: DIAGNOSIS (Problems)
 Discipline: ${formData.discipline}
 Coach: ${formData.coachName}
 Date: ${formData.meetingDate}
@@ -717,9 +688,7 @@ Date: ${formData.meetingDate}
 Situation:
 ${client.situation}
 
-DIAGNOSIS
-What told me they needed this:
-${client.signals}
+WHAT TELLS YOU THEY NEED THIS DISCIPLINE:
 
 What the client said:
 ${client.said}
@@ -727,18 +696,8 @@ ${client.said}
 What I observed:
 ${client.observed}
 
-Why I focused on this discipline:
+Why this discipline (vs another):
 ${client.why}
-
-SOLUTION & OUTCOME
-What I used:
-${client.solution}
-
-What worked:
-${client.worked}
-
-Gaps identified:
-${client.gaps}
 
 ---
 
@@ -746,7 +705,7 @@ ${client.gaps}
             });
 
             output += `KEY TAKEAWAYS
-[Add 2-3 sentences summarizing your key insights for the group]`;
+[Add 2-3 sentences summarizing the patterns you're seeing across these examples]`;
 
             document.getElementById('outputContent').textContent = output;
         }

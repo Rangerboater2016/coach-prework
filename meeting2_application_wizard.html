@@ -583,43 +583,38 @@
                             <textarea id="clientSituation${i}" placeholder="Describe the client's situation when you started working with them..."></textarea>
                         </div>
 
-                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">🔍 Diagnosis</h3>
+                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">💡 Success Story Framework</h3>
 
                         <div class="form-group">
-                            <label>What told you the client needed this discipline?</label>
-                            <textarea id="clientSignals${i}" placeholder="What specific signals or indicators pointed to this need?"></textarea>
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">1</span>Client Problem:</label>
+                            <textarea id="clientProblem${i}" placeholder="What was the client struggling with? (If possible, reference problems from Meeting 1)"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label>What the client said:</label>
-                            <textarea id="clientSaid${i}" placeholder="Direct quotes or paraphrased statements, their expressed pain points..."></textarea>
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">2</span>What You Used:</label>
+                            <textarea id="clientUsed${i}" placeholder="What tool, workshop, framework, or approach did you use? (Standard Aileron offering or custom?)"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label>What you observed:</label>
-                            <textarea id="clientObserved${i}" placeholder="Behaviors, patterns, data, symptoms you noticed..."></textarea>
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">3</span>Why You Chose It:</label>
+                            <textarea id="clientWhy${i}" placeholder="What was your diagnostic reasoning? Why THIS approach for THIS client?"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label>Why you chose to focus on this discipline:</label>
-                            <textarea id="clientWhy${i}" placeholder="Your reasoning for prioritizing this discipline and how it connected to getting them traction..."></textarea>
+                            <label><span class="client-number" style="width: 25px; height: 25px; line-height: 25px; font-size: 14px;">4</span>Results Achieved:</label>
+                            <textarea id="clientResults${i}" placeholder="What happened? Be specific - timeframe, numbers, observable changes, what the client said..."></textarea>
                         </div>
 
-                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">💡 Solution & Outcome</h3>
+                        <h3 style="margin: 25px 0 15px 0; color: #667eea;">📦 Additional Information (Optional)</h3>
 
                         <div class="form-group">
-                            <label>What you used or recommended:</label>
-                            <textarea id="clientSolution${i}" placeholder="Specific services, workshops, tools, approaches - standard or custom..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>What worked:</label>
-                            <textarea id="clientWorked${i}" placeholder="Results achieved, traction gained, why it was effective..."></textarea>
+                            <label>Resources to share:</label>
+                            <textarea id="clientResources${i}" placeholder="Did you create any templates, worksheets, or tools others could use?" style="min-height: 80px;"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label>Gaps identified:</label>
-                            <textarea id="clientGaps${i}" placeholder="Anything missing from current offerings, resources you created, collaboration opportunities..."></textarea>
+                            <textarea id="clientGaps${i}" placeholder="What do clients need that we DON'T have good solutions for?" style="min-height: 80px;"></textarea>
                         </div>
                     </div>
                     ${i < formData.clientCount - 1 ? '<hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">' : ''}
@@ -639,12 +634,11 @@
                 formData.clients.forEach((client, i) => {
                     document.getElementById(`clientName${i}`).value = client.name || '';
                     document.getElementById(`clientSituation${i}`).value = client.situation || '';
-                    document.getElementById(`clientSignals${i}`).value = client.signals || '';
-                    document.getElementById(`clientSaid${i}`).value = client.said || '';
-                    document.getElementById(`clientObserved${i}`).value = client.observed || '';
+                    document.getElementById(`clientProblem${i}`).value = client.problem || '';
+                    document.getElementById(`clientUsed${i}`).value = client.used || '';
                     document.getElementById(`clientWhy${i}`).value = client.why || '';
-                    document.getElementById(`clientSolution${i}`).value = client.solution || '';
-                    document.getElementById(`clientWorked${i}`).value = client.worked || '';
+                    document.getElementById(`clientResults${i}`).value = client.results || '';
+                    document.getElementById(`clientResources${i}`).value = client.resources || '';
                     document.getElementById(`clientGaps${i}`).value = client.gaps || '';
                 });
             }
@@ -657,18 +651,17 @@
                 const client = {
                     name: document.getElementById(`clientName${i}`).value || 'Anonymous',
                     situation: document.getElementById(`clientSituation${i}`).value,
-                    signals: document.getElementById(`clientSignals${i}`).value,
-                    said: document.getElementById(`clientSaid${i}`).value,
-                    observed: document.getElementById(`clientObserved${i}`).value,
+                    problem: document.getElementById(`clientProblem${i}`).value,
+                    used: document.getElementById(`clientUsed${i}`).value,
                     why: document.getElementById(`clientWhy${i}`).value,
-                    solution: document.getElementById(`clientSolution${i}`).value,
-                    worked: document.getElementById(`clientWorked${i}`).value,
+                    results: document.getElementById(`clientResults${i}`).value,
+                    resources: document.getElementById(`clientResources${i}`).value,
                     gaps: document.getElementById(`clientGaps${i}`).value
                 };
 
-                // Basic validation
-                if (!client.situation || !client.signals || !client.solution) {
-                    alert(`Please fill in at least the situation, key signals, and solution for Client ${i + 1}`);
+                // Basic validation - require the 4-part framework
+                if (!client.problem || !client.used || !client.why || !client.results) {
+                    alert(`Please complete the 4-part framework (Problem, What Used, Why, Results) for Client ${i + 1}`);
                     return false;
                 }
 
@@ -703,6 +696,7 @@
 
         function generateOutput() {
             let output = `BUSINESS COACH DEVELOPMENT MEETING PRE-WORK
+MEETING 2: APPLICATION (Solutions)
 Discipline: ${formData.discipline}
 Coach: ${formData.coachName}
 Date: ${formData.meetingDate}
@@ -712,41 +706,48 @@ Date: ${formData.meetingDate}
 `;
 
             formData.clients.forEach((client, i) => {
-                output += `CLIENT EXAMPLE ${i + 1}: ${client.name}
+                output += `SUCCESS STORY ${i + 1}: ${client.name}
 
-Situation:
+Brief Context:
 ${client.situation}
 
-DIAGNOSIS
-What told me they needed this:
-${client.signals}
+SUCCESS STORY FRAMEWORK:
 
-What the client said:
-${client.said}
+1. CLIENT PROBLEM:
+${client.problem}
 
-What I observed:
-${client.observed}
+2. WHAT I USED:
+${client.used}
 
-Why I focused on this discipline:
+3. WHY I CHOSE IT:
 ${client.why}
 
-SOLUTION & OUTCOME
-What I used:
-${client.solution}
+4. RESULTS ACHIEVED:
+${client.results}
+`;
 
-What worked:
-${client.worked}
+                if (client.resources) {
+                    output += `
+RESOURCES TO SHARE:
+${client.resources}
+`;
+                }
 
-Gaps identified:
+                if (client.gaps) {
+                    output += `
+GAPS IDENTIFIED:
 ${client.gaps}
+`;
+                }
 
+                output += `
 ---
 
 `;
             });
 
             output += `KEY TAKEAWAYS
-[Add 2-3 sentences summarizing your key insights for the group]`;
+[Add 2-3 sentences summarizing what works and what gaps you're seeing]`;
 
             document.getElementById('outputContent').textContent = output;
         }
